@@ -1,0 +1,60 @@
+[options]
+resize_grip = false
+scroll_on_output = false
+scroll_on_keystroke = true
+audible_bell = false
+visible_bell = false
+mouse_autohide = false
+allow_bold = false
+dynamic_title = true
+urgent_on_bell = true
+clickable_url = true
+font = monospace 8 
+scrollback_lines = 1000
+search_wrap = true
+
+# 0.0: opaque, 1.0: transparent
+# transparency = 0.15
+transparency = 0
+pseudo_transparency = false
+
+# "system", "on" or "off"
+cursor_blink = system
+
+# "block", "underline" or "ibeam"
+cursor_shape = block
+
+# $BROWSER is used by default
+browser = firefox-developer-edition
+
+# word characters used for word selection
+# (default if unset: all graphic non-punctuation/space characters)
+#word_chars = -A-Za-z0-9,./?%&#:_=+@~
+
+[colors]
+#foreground = #f8f8f2
+foreground_bold = #ffffff
+#foreground_dim = #888888
+background = #262729
+cursor = #b5d2dd
+
+# if unset, will reverse foreground and background
+highlight = #2f2f2f
+
+# colors from color0 to color254 can be set
+color0 = #2a2a2a
+color1 = #f92671
+color2 = #a6e22e
+color3 = #fd971f
+color4 = #1692d0
+color5 = #9e6ffe
+color6 = #5e7175
+color7 = #ffffff
+color8 = #2f2f2f
+color9 = #ff669d
+color10 = #beed5f
+color11 = #e6db74
+color12 = #66d9ef
+color13 = #df92f6
+color14 = #a3babf
+color15 = #ffffff
