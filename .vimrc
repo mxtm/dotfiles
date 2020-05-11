@@ -100,3 +100,6 @@ au BufNewFile,BufRead *.py set tabstop=4 softtabstop=4 shiftwidth=4 textwidth=79
 "if empty(v:servername) && exists('*remote_startserver')
 ""  call remote_startserver('VIM')
 "endif
+
+"Copy and paste across terminals
+set clipboard=unnamed
