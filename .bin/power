@@ -1,0 +1,19 @@
+#!/bin/bash
+COMMANDS="Exit\nRestart dwm\nShutdown\nReboot"
+
+COMMAND=`echo -e $COMMANDS | dmenu -i -p "Power:" "$@"`
+echo $COMMAND
+case $COMMAND in
+	Exit)
+		kill -TERM `pidof dwm` 
+	;;
+	"Restart dwm")
+		kill -HUP `pidof dwm` 
+	;;
+	Shutdown)
+		exec systemctl poweroff
+	;;
+	Reboot)
+		exec systemctl reboot
+	;;
+esac
