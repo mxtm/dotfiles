@@ -9,22 +9,22 @@ conky.config = {
 }
 
 conky.text = [[
-^c\#15616d^^c\#ffffff^^b\#15616d^ Temp. ${hwmon 5 temp 1}C \
+^c\#15616d^^c\#ffffff^^b\#15616d^  ${hwmon 5 temp 1} C \
 \
-^c\#ff7d00^^c\#ffffff^^b\#ff7d00^  \
+^c\#ff7d00^^c\#ffffff^^b\#ff7d00^ \
 ${if_existing /proc/net/route wlp3s0}\
-${wireless_essid wlp3s0} @ ${wireless_link_qual_perc wlp3s0}% \
+  ${wireless_essid wlp3s0} @ ${wireless_link_qual_perc wlp3s0}% \
 ${else}${if_existing /proc/net/route enp0s31f6}wired \
 ${else}${if_existing /proc/net/route enp0s20f0u4}usb tethering \
 ${else}no connection \
-${endif} \
-${endif} \
-${endif} \
+${endif}\
+${endif}\
+${endif}\
 \
-^c\#72890f^^c\#ffffff^^b\#72890f^ CPU ${cpu}% \
-^c\#870058^^c\#ffffff^^b\#870058^ RAM ${mem} \
-^c\#f44336^^c\#ffffff^^b\#f44336^ Batt. ${battery_percent}% \
-^c\#673ab7^^c\#ffffff^^b\#673ab7^ Vol. ${pa_sink_volume}% \
-^c\#3f51b5^^c\#ffffff^^b\#3f51b5^ BEY: ${tztime Asia/Beirut %H:%M:%S} \
-^c\#2196f3^^c\#ffffff^^b\#2196f3^ BOS: ${time %H:%M:%S} 
+^c\#72890f^^c\#ffffff^^b\#72890f^   ${cpu}% \
+^c\#870058^^c\#ffffff^^b\#870058^   ${mem} \
+^c\#f44336^^c\#ffffff^^b\#f44336^   ${battery_percent}% \
+^c\#673ab7^^c\#ffffff^^b\#673ab7^ 墳 ${pa_sink_volume}% \
+^c\#3f51b5^^c\#ffffff^^b\#3f51b5^   ${tztime Asia/Beirut %H:%M:%S} \
+^c\#2196f3^^c\#ffffff^^b\#2196f3^   ${time %H:%M:%S} \
 ]]
