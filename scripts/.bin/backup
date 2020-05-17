@@ -1,0 +1,65 @@
+#!/bin/bash
+
+readarray -t BACKUP_TARGETS < ~/.backup_configuration/targets 
+readarray -t TO_EXCLUDE < ~/.backup_configuration/exclude
+
+print_usage() {
+	printf "Usage:\n"
+	printf "backup -r            run backup using restic\n"
+	printf "       -n directory  show, using ncdu, sizes of the files to be backed up\n"
+	printf "       -s            show the total size of the files to be backed up\n"
+	printf "       -h            show this help message\n"
+}
+
+run_backup() {
+	arguments=""
+
+	for directory in "${TO_EXCLUDE[@]}"
+	do
+		arguments+=" --exclude=\"${directory}\""
+	done
+
+	for directory in "${BACKUP_TARGETS[@]}"
+	do
+		arguments+=" \"${directory}\""
+	done
+
+	eval "sudo -E restic backup $arguments"
+}
+
+backup_ncdu() {
+	arguments=""
+
+	for directory in "${TO_EXCLUDE[@]}"
+	do
+		arguments+=" --exclude=\"${directory}\""
+	done
+
+	eval "ncdu $arguments $1"
+}
+
+backup_size() {
+	arguments=""
+
+	for directory in "${TO_EXCLUDE[@]}"
+	do
+		arguments+=" --exclude=\"${directory}\""
+	done
+
+	for directory in "${BACKUP_TARGETS[@]}"
+	do
+		arguments+=" \"${directory}\""
+	done
+
+	eval "du -sh $arguments"
+}
+
+while getopts ':rn:sh' flag; do
+	case $flag in
+		r) run_backup ;;
+		n) backup_ncdu $OPTARG;;
+		s) backup_size ;;
+		h) print_usage
+			exit 0 ;;
+	esac
+done
