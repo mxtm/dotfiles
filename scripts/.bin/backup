@@ -21,10 +21,15 @@ print_usage() {
 	printf "       -n directory   show, using ncdu, sizes of the files to be backed up\n"
 	printf "       -s             show the total size of the files to be backed up\n"
 	printf "       -m mountpoint  mount the repository on the specified mountpoint\n"
+	printf "       -p n           remove snapshots and prune unneeded data, keeping n most recent snapshots\n"
+	printf "       -l             list snapshots\n"
+	printf "       -c             check repository integrity\n"
 	printf "       -h             show this help message\n"
 }
 
-run_backup() {
+generate_arguments() {
+	include_backup_targets=$1
+
 	arguments=""
 
 	for directory in "${TO_EXCLUDE[@]}"
@@ -32,51 +37,53 @@ run_backup() {
 		arguments+=" --exclude=\"${directory}\""
 	done
 
-	for directory in "${BACKUP_TARGETS[@]}"
-	do
+	if [ "$include_backup_targets" = true ]; then
+		for directory in "${BACKUP_TARGETS[@]}"
+		do
 		arguments+=" \"${directory}\""
-	done
+		done
+	fi
 
-	eval "sudo -E restic backup $arguments"
+	echo $arguments
+}
+
+run_backup() {
+	eval "sudo -E restic backup `generate_arguments true`"
 }
 
 backup_ncdu() {
-	arguments=""
-
-	for directory in "${TO_EXCLUDE[@]}"
-	do
-		arguments+=" --exclude=\"${directory}\""
-	done
-
-	eval "ncdu $arguments $1"
+	eval "ncdu `generate_arguments false` $1"
 }
 
 backup_size() {
-	arguments=""
-
-	for directory in "${TO_EXCLUDE[@]}"
-	do
-		arguments+=" --exclude=\"${directory}\""
-	done
-
-	for directory in "${BACKUP_TARGETS[@]}"
-	do
-		arguments+=" \"${directory}\""
-	done
-
-	eval "du -sh $arguments"
+	eval "du -sh `generate_arguments true`"
 }
 
 mount_repository() {
 	sudo -E restic mount $1
 }
 
-while getopts ':rn:sm:h' flag; do
+prune() {
+	sudo -E restic --keep-last=$1 --prune
+}
+
+list() {
+	sudo -E restic snapshots
+}
+
+check() {
+	sudo -E restic check
+}
+
+while getopts ':rn:sm:p:lch' flag; do
 	case $flag in
 		r) run_backup ;;
-		n) backup_ncdu $OPTARG;;
+		n) backup_ncdu $OPTARG ;;
 		s) backup_size ;;
-		m) mount_repository $OPTARG;;
+		m) mount_repository $OPTARG ;;
+		p) prune $OPTARG ;;
+		l) list ;;
+		c) check ;;
 		h) print_usage
 			exit 0 ;;
 	esac
