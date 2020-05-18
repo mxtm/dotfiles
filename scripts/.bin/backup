@@ -1,14 +1,27 @@
 #!/bin/bash
 
+# restic backup script
+# By Maxwell R. T-M <max@mxtm.me>
+
+# To use:
+# Create a directory .backup_configuration
+# Create two text files named targets and exclude in this directory.
+# List on each line in targets a directory to be backed up
+# List on each line in exclude a file / directory to be excluded from backup
+
+# TODO: Add mount repository option
+# TODO: Add forget and prune option
+
 readarray -t BACKUP_TARGETS < ~/.backup_configuration/targets 
 readarray -t TO_EXCLUDE < ~/.backup_configuration/exclude
 
 print_usage() {
 	printf "Usage:\n"
-	printf "backup -r            run backup using restic\n"
-	printf "       -n directory  show, using ncdu, sizes of the files to be backed up\n"
-	printf "       -s            show the total size of the files to be backed up\n"
-	printf "       -h            show this help message\n"
+	printf "backup -r             run backup using restic\n"
+	printf "       -n directory   show, using ncdu, sizes of the files to be backed up\n"
+	printf "       -s             show the total size of the files to be backed up\n"
+	printf "       -m mountpoint  mount the repository on the specified mountpoint\n"
+	printf "       -h             show this help message\n"
 }
 
 run_backup() {
@@ -54,11 +67,16 @@ backup_size() {
 	eval "du -sh $arguments"
 }
 
-while getopts ':rn:sh' flag; do
+mount_repository() {
+	sudo -E restic mount $1
+}
+
+while getopts ':rn:sm:h' flag; do
 	case $flag in
 		r) run_backup ;;
 		n) backup_ncdu $OPTARG;;
 		s) backup_size ;;
+		m) mount_repository $OPTARG;;
 		h) print_usage
 			exit 0 ;;
 	esac
