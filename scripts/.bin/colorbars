@@ -1,0 +1,29 @@
+#!/usr/bin/bash
+
+echo
+
+for y in {0..13};
+  do
+  for color in 47m 43m 46m 42m 45m 41m 44m;
+    do echo -en "\033[$color        \033[0m";
+  done
+  echo;
+done
+
+for y in {0..1};
+  do
+  for color in 44m 40m 45m 40m 46m 40m 47m;
+    do echo -en "\033[$color        \033[0m";
+  done
+  echo;
+done
+
+for y in {0..4};
+  do
+  for color in 44m 44m 44m 44m 44m 47m 47m 47m 47m 47m 45m 45m 45m 45m 45m 40m 40m 40m 40m 40m 40m 40m 40m 40m 40m 40m 40m 40m;
+    do echo -en "\033[$color  \033[0m";
+  done
+  echo;
+done
+
+echo

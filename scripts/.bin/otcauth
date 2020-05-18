@@ -1,0 +1,11 @@
+#!/bin/bash
+# #bitcoin-otc GPG ident script
+# written by mxtm, Max T-M <max@mxtm.me>
+
+keyid='E95F0F4DAFC7E89C'
+
+otp=$(curl --silent http://bitcoin-otc.com/otps/$keyid | gpg --decrypt)
+
+echo -n $otp | xsel -b
+echo -n $otp | xsel
+echo -e "Your decrypted OTP is:\n$otp\n(copied to clipboard)"

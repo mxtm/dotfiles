@@ -1,0 +1,20 @@
+#!/bin/bash
+#HiDPi monitor [AxB] px, regular monitor CxD px, scaling by [ExF]
+A=2560
+B=1440
+C=1920
+D=1080
+E=1.5
+F=1.5
+#xrandr --output eDP-1 --auto --pos 0x(DxF) --output HDMI-1 --auto --scale [E]x[F] --pos 0x0 --fb [greater between A and (C*E)]x[B+(D*F)]
+CtimesE=$(echo "$C*$E" | bc -l)
+DtimesF=$(echo "$D*$F" | bc -l)
+BplusDtimesF=$(echo "$B+$D*$F" | bc -l)
+if [ "$A" -gt "${CtimesE%.*}" ]; then
+	FB_value=$A
+else
+	FB_value=${CtimesE%.*}
+fi
+xrandr --output eDP-1 --auto --pos 0x${DtimesF%.*} --output HDMI-1 --auto --scale $E'x'$F --pos 0x0 --fb $FB_value'x'${BplusDtimesF%.*}
+#xrandr --output eDP-1 --auto --pos 0x1458 --output HDMI-1 --scale 1.35x1.35 --auto --pos 0x0 --fb 2592x2898
+hsetroot -solid

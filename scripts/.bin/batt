@@ -1,0 +1,13 @@
+#!/bin/bash
+export XDG_RUNTIME_DIR="/run/user/1000"
+export XDG_SEAT="seat0"
+export XDG_SESSION_ID="c1"
+export XDG_VTNR="1"
+export DISPLAY=:0
+raw_output=`acpi -b`
+batt_perc=`grep -P -o '[0-9]+(?=%)' <<< "$raw_output"`
+if [ $batt_perc -le 5 ] && [[ $raw_output != *"Charging"* ]] ; then
+	systemctl hibernate
+elif [ $batt_perc -le 20 ] && [[ $raw_output != *"Charging"* ]] ; then
+	/usr/bin/notify-send -u critical "Low Battery" "The current battery level is $batt_perc%. Plug in to a power source as soon as possible."
+fi
