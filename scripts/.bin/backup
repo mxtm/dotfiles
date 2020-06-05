@@ -9,9 +9,6 @@
 # List on each line in targets a directory to be backed up
 # List on each line in exclude a file / directory to be excluded from backup
 
-# TODO: Add mount repository option
-# TODO: Add forget and prune option
-
 readarray -t BACKUP_TARGETS < ~/.backup_configuration/targets 
 readarray -t TO_EXCLUDE < ~/.backup_configuration/exclude
 
@@ -25,6 +22,7 @@ print_usage() {
 	printf "       -l             list snapshots\n"
 	printf "       -c             check repository integrity\n"
 	printf "       -h             show this help message\n"
+	printf "       -e             check for excludes that don't exist\n"
 }
 
 generate_arguments() {
@@ -75,7 +73,16 @@ check() {
 	sudo -E restic check
 }
 
-while getopts ':rn:sm:p:lch' flag; do
+check_excludes() {
+	for directory in "${TO_EXCLUDE[@]}"
+		do
+			if ! [ -n "$(find "$directory" | head -1)" ]; then
+				echo "$directory does not match any files."
+			fi
+		done
+}
+
+while getopts ':rn:sm:p:lceh' flag; do
 	case $flag in
 		r) run_backup ;;
 		n) backup_ncdu $OPTARG ;;
@@ -84,6 +91,7 @@ while getopts ':rn:sm:p:lch' flag; do
 		p) prune $OPTARG ;;
 		l) list ;;
 		c) check ;;
+		e) check_excludes ;;
 		h) print_usage
 			exit 0 ;;
 	esac

@@ -42,6 +42,10 @@ Plugin 'tmhedberg/SimpylFold'
 Plugin 'vim-scripts/indentpython.vim'
 Plugin 'lervag/vimtex'
 
+Plugin 'tpope/vim-surround'
+
+Plugin 'tpope/vim-repeat'
+
 "End plugins section
 call vundle#end()
 filetype plugin indent on
