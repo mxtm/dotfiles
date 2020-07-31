@@ -13,14 +13,14 @@ Plugin 'VundleVim/Vundle.vim'
 
 "Other plugins
 
-Bundle 'bling/vim-airline'
+Plugin 'bling/vim-airline'
 "Configuration for vim-airline
 let g:airline_powerline_fonts = 1
 set ttimeoutlen=50
 
-Bundle 'bling/vim-bufferline'
+Plugin 'bling/vim-bufferline'
 
-"Bundle 'Valloric/YouCompleteMe'
+"Plugin 'Valloric/YouCompleteMe'
 "Configuration for YouCompleteMe
 "autocmd CompleteDone * pclose
 "let g:ycm_autoclose_preview_window_after_completion=1
@@ -35,7 +35,7 @@ Bundle 'bling/vim-bufferline'
 "Using eclim for Java
 "let g:EclimCompletionMethod = 'omnifunc'
 
-Bundle 'Raimondi/delimitMate'
+Plugin 'Raimondi/delimitMate'
 
 Plugin 'tmhedberg/SimpylFold'
 
@@ -45,6 +45,8 @@ Plugin 'lervag/vimtex'
 Plugin 'tpope/vim-surround'
 
 Plugin 'tpope/vim-repeat'
+Plugin 'ap/vim-css-color'
+Plugin '2072/PHP-Indenting-for-VIm'
 
 "End plugins section
 call vundle#end()
