@@ -21,3 +21,5 @@ if [ "$TERM" != "linux" ]; then
 fi
 
 TERM='xterm-256color'
+HISTSIZE=2500
+HISTFILESIZE=2500
