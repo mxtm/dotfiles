@@ -15,6 +15,18 @@ if [ "$A" -gt "${CtimesE%.*}" ]; then
 else
 	FB_value=${CtimesE%.*}
 fi
-xrandr --output eDP-1 --auto --pos 0x${DtimesF%.*} --output HDMI-1 --auto --scale $E'x'$F --pos 0x0 --fb $FB_value'x'${BplusDtimesF%.*}
+
+echo "A: $A"
+echo "B: $B"
+echo "C: $C"
+echo "D: $D"
+echo "E: $E"
+echo "F: $F"
+echo "CtimesE: $CtimesE"
+echo "DtimesF: $DtimesF"
+echo "BplusDtimesF: $BplusDtimesF"
+echo "FB_value: $FB_value"
+echo "xrandr --output eDP-1 --auto --pos 0x${DtimesF%.*} --output HDMI-1 --auto --scale $E'x'$F --pos 0x0 --fb $FB_value'x'${BplusDtimesF%.*}"
+#xrandr --output eDP-1 --auto --pos 0x180 --output HDMI-1 --auto --scale $E'x'$F --pos 2560x0 --fb $FB_value'x'${BplusDtimesF%.*}
 #xrandr --output eDP-1 --auto --pos 0x1458 --output HDMI-1 --scale 1.35x1.35 --auto --pos 0x0 --fb 2592x2898
-hsetroot -solid
+#hsetroot -solid

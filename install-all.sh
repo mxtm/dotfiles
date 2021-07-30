@@ -1,3 +1,3 @@
 #!/bin/bash
 
-stow scripts termite tmux vim conky fontconfig bash dunst pureline
+stow scripts termite tmux vim conky fontconfig bash dunst pureline kitty
