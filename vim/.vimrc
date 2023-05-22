@@ -1,24 +1,13 @@
 "Plugins
 
-"Required for Vundle
-set nocompatible
-filetype off
+call plug#begin()
 
-"Initialize Vundle
-set rtp+=~/.vim/bundle/Vundle.vim
-call vundle#begin()
-
-"Vundle managing itself
-Plugin 'VundleVim/Vundle.vim'
-
-"Other plugins
-
-Plugin 'bling/vim-airline'
+Plug 'bling/vim-airline'
 "Configuration for vim-airline
 let g:airline_powerline_fonts = 1
 set ttimeoutlen=50
 
-Plugin 'bling/vim-bufferline'
+Plug 'bling/vim-bufferline'
 
 "Plugin 'Valloric/YouCompleteMe'
 "Configuration for YouCompleteMe
@@ -35,25 +24,39 @@ Plugin 'bling/vim-bufferline'
 "Using eclim for Java
 "let g:EclimCompletionMethod = 'omnifunc'
 
-Plugin 'Raimondi/delimitMate'
+Plug 'Raimondi/delimitMate'
 
-Plugin 'tmhedberg/SimpylFold'
+Plug 'tmhedberg/SimpylFold'
 
-Plugin 'vim-scripts/indentpython.vim'
-Plugin 'lervag/vimtex'
+Plug 'vim-scripts/indentpython.vim'
+Plug 'lervag/vimtex'
+let g:vimtex_view_general_viewer = 'evince'
 
-Plugin 'tpope/vim-surround'
+Plug 'tpope/vim-surround'
 
-Plugin 'tpope/vim-repeat'
-Plugin 'ap/vim-css-color'
-Plugin '2072/PHP-Indenting-for-VIm'
+Plug 'tpope/vim-repeat'
+"Plugin 'ap/vim-css-color'
+"Plugin '2072/PHP-Indenting-for-VIm'
+
+Plug 'tpope/vim-vinegar'
+let g:netrw_list_hide = '\(^\|\s\s\)\zs\.\S\+'
+
+if has('nvim')
+	let g:polyglot_disabled = ['python']
+	Plug 'numirias/semshi', { 'do': ':UpdateRemotePlugins' }
+	"let g:semshi#excluded_hl_groups = []
+	let g:semshi#simplify_markup = v:false
+endif
+
+Plug 'sheerun/vim-polyglot'
+
+Plug 'tpope/vim-sleuth'
+
+call plug#end()
 
 "End plugins section
-call vundle#end()
-filetype plugin indent on
 
 "Basic configuration
-syntax on
 set backspace=2
 set history=500
 set ruler
@@ -86,6 +89,9 @@ inoremap <down> <nop>
 inoremap <left> <nop>
 inoremap <right> <nop>
 
+"Disable the mouse
+set mouse=
+
 "Auto indenting toggle for pasting
 nnoremap <F2> :set invpaste paste?<CR>
 set pastetoggle=<F2>
@@ -100,12 +106,15 @@ set foldlevel=99
 nnoremap <space> za
 
 "Python specific configuration
-au BufNewFile,BufRead *.py set tabstop=4 softtabstop=4 shiftwidth=4 textwidth=79 expandtab autoindent fileformat=unix
+"au BufNewFile,BufRead *.py set tabstop=4 softtabstop=4 shiftwidth=4 textwidth=79 expandtab autoindent fileformat=unix
 "au BufRead,BufNewFile *.py,*.pyw,*.c,*.h match BadWhitespace /\s\+$/
 "
-if empty(v:servername) && exists('*remote_startserver')
-  call remote_startserver('VIM')
-endif
+"if empty(v:servername) && exists('*remote_startserver')
+"  call remote_startserver('VIM')
+"endif
 
 "Copy and paste across terminals
 set clipboard=unnamed
+
+"Make line numbers grey instead of gold
+highlight LineNr ctermfg=grey
