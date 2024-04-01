@@ -1,42 +1,35 @@
--- Plugins
+-- Pre plugin loading configuration
+vim.g.python3_host_prog = '/usr/bin/python3.8'
+vim.g.polyglot_disabled = { 'python', 'autoindent' }
+
+-- Plugin loading
 local vim = vim
 local Plug = vim.fn['plug#']
 
 vim.call('plug#begin')
 
---[[
-Plug('bling/vim-airline')
-vim.g.airline_powerline_fonts = 1
---]]
+-- Optional dependency of trouble.nvim and lualine.nvim
+Plug('nvim-tree/nvim-web-devicons')
 
 Plug('nvim-lualine/lualine.nvim')
 
-Plug('bling/vim-bufferline')
+-- Plug('bling/vim-bufferline')
 
 Plug('Raimondi/delimitMate')
 
 Plug('tmhedberg/SimpylFold')
 
-Plug('vim-scripts/indentpython.vim')
+-- Plug('vim-scripts/indentpython.vim')
 
 Plug('lervag/vimtex')
-vim.g.vimtex_view_general_viewer = 'evince'
 
 Plug('tpope/vim-surround')
 
 Plug('tpope/vim-repeat')
 
---[[
-Plug('tpope/vim-vinegar')
-vim.cmd("let g:netrw_list_hide = '\(^\|\s\s\)\zs\.\S\+'")
---]]
-
-vim.g.python3_host_prog = '/usr/bin/python3.8'
-vim.g.polyglot_disabled = { 'python' }
 Plug('wookayin/semshi', { ['do'] = function()
      vim.cmd["UpdateRemotePlugins"]()
 end })
-vim.g['semshi#simplify_markup'] = false
 
 Plug('ellisonleao/glow.nvim')
 
@@ -47,17 +40,26 @@ Plug('sheerun/vim-polyglot')
 Plug('tpope/vim-sleuth')
 
 Plug('kkoomen/vim-doge')
-vim.g.doge_doc_standard_python = 'google'
-
---[[
-Plug('nvim-treesitter/nvim-treesitter', { ['do'] = function()
-  vim.cmd["TSUpdate"]()
-end })
---]]
 
 Plug('dstein64/vim-startuptime')
 
+Plug('folke/trouble.nvim')
+
+Plug('tpope/vim-fugitive')
+
+Plug('tpope/vim-rhubarb')
+
 vim.call('plug#end')
+
+-- Post plugin loading configuration
+
+vim.g.vimtex_view_general_viewer = 'evince'
+
+vim.g['semshi#simplify_markup'] = false
+
+vim.g.doge_doc_standard_python = 'google'
+
+-- General neovim configuration
 
 vim.opt.number = true
 
@@ -70,17 +72,14 @@ vim.opt.showmatch = true
 vim.opt.ignorecase = true
 vim.opt.smartcase = true
 
+vim.opt.clipboard = "unnamed"
+
+vim.api.nvim_set_hl(0, 'LineNr', { ctermfg = 'grey' })
+
+vim.opt.foldmethod = "indent"
+vim.opt.foldlevel = 99
+
 vim.opt.mouse = ''
-
-vim.cmd([[
-"Auto indenting toggle for pasting
-nnoremap <F2> :set invpaste paste?<CR>
-set pastetoggle=<F2>
-set showmode
-
-"Reformat key
-map <F7> mzgg=G`z<CR>
-]])
 
 vim.keymap.set('n', '<up>', '<nop>')
 vim.keymap.set('n', '<down>', '<nop>')
@@ -91,13 +90,19 @@ vim.keymap.set('i', '<down>', '<nop>')
 vim.keymap.set('i', '<left>', '<nop>')
 vim.keymap.set('i', '<right>', '<nop>')
 
-vim.opt.foldmethod = "indent"
-vim.opt.foldlevel = 99
-vim.keymap.set('n', '<space>', 'za')
+--[[
+"Auto indenting toggle for pasting
+nnoremap <F2> :set invpaste paste?<CR>
+set pastetoggle=<F2>
+set showmode
 
-vim.opt.clipboard = "unnamed"
+"Reformat key
+map <F7> mzgg=G`z<CR>
+--]]
 
-vim.api.nvim_set_hl(0, 'LineNr', { ctermfg = 'grey' })
+-- Lua plugin configuration
+
+require('lualine').setup()
 
 require('glow').setup()
 
@@ -105,10 +110,11 @@ local lspconfig = require('lspconfig')
 lspconfig.ruff_lsp.setup{
   init_options = {
     settings = {
-      args = {},
+      -- format = { args = { "--line-length=100" } },
     }
   }
 }
+lspconfig.bashls.setup{}
 -- Global mappings.
 -- See `:help vim.diagnostic.*` for documentation on any of the below functions
 vim.keymap.set('n', '<space>e', vim.diagnostic.open_float)
@@ -146,30 +152,3 @@ vim.api.nvim_create_autocmd('LspAttach', {
     end, opts)
   end,
 })
-
-require('lualine').setup()
-
---[[
-require('nvim-treesitter.configs').setup {
-  ensure_installed = { "c", "lua", "vim", "vimdoc", "query", "python" },
-
-  -- Install parsers synchronously (only applied to `ensure_installed`)
-  sync_install = false,
-
-  -- Automatically install missing parsers when entering buffer
-  -- Recommendation: set to false if you don't have `tree-sitter` CLI installed locally
-  auto_install = true,
-
-  highlight = {
-    enable = true,
-
-    disable = { "c", "rust" },
-
-    -- Setting this to true will run `:h syntax` and tree-sitter at the same time.
-    -- Set this to `true` if you depend on 'syntax' being enabled (like for indentation).
-    -- Using this option may slow down your editor, and you may see some duplicate highlights.
-    -- Instead of true it can also be a list of languages
-    additional_vim_regex_highlighting = false,
-  },
-}
---]]
