@@ -49,6 +49,8 @@ Plug('tpope/vim-fugitive')
 
 Plug('tpope/vim-rhubarb')
 
+Plug('lcheylus/overlength.nvim')
+
 vim.call('plug#end')
 
 -- Post plugin loading configuration
@@ -102,7 +104,19 @@ map <F7> mzgg=G`z<CR>
 
 -- Lua plugin configuration
 
-require('lualine').setup()
+require('lualine').setup {
+  sections = {
+    lualine_a = {'mode'},
+    lualine_b = {
+      {'branch', fmt = function(str) return str:sub(1, 20) end },
+      'diff', 'diagnostics'
+    },
+    lualine_c = {'filename'},
+    lualine_x = {'encoding', 'fileformat', 'filetype'},
+    lualine_y = {'progress'},
+    lualine_z = {'location'}
+  }
+}
 
 require('glow').setup()
 
@@ -151,4 +165,8 @@ vim.api.nvim_create_autocmd('LspAttach', {
       vim.lsp.buf.format { async = true }
     end, opts)
   end,
+})
+
+require('overlength').setup({
+  textwidth_mode = 1
 })
