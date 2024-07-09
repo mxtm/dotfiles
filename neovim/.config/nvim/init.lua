@@ -1,5 +1,9 @@
+-- Revert to pre-0.10.0 color defaults
+vim.cmd.colorscheme('vim')
+vim.o.termguicolors = false
+
 -- Pre plugin loading configuration
-vim.g.python3_host_prog = '/usr/bin/python3.8'
+vim.g.python3_host_prog = '/usr/bin/python'
 vim.g.polyglot_disabled = { 'python', 'autoindent' }
 
 -- Plugin loading
