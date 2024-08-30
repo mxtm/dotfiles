@@ -55,6 +55,8 @@ Plug('tpope/vim-rhubarb')
 
 Plug('lcheylus/overlength.nvim')
 
+Plug('ntpeters/vim-better-whitespace')
+
 vim.call('plug#end')
 
 -- Post plugin loading configuration
@@ -174,3 +176,5 @@ vim.api.nvim_create_autocmd('LspAttach', {
 require('overlength').setup({
   textwidth_mode = 1
 })
+
+require('trouble').setup()
