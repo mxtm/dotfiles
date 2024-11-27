@@ -66,7 +66,11 @@ require("lazy").setup({
       "wookayin/semshi",
       build = ":UpdateRemotePlugins",
       init = function()
-	vim.g.python3_host_prog = "/usr/bin/python"
+	if vim.loop.os_uname().sysname == "Darwin" then
+	  vim.g.python3_host_prog = "/opt/homebrew/bin/python3.11"
+	else
+	  vim.g.python3_host_prog = "/usr/bin/python"
+	end
 	vim.g['semshi#simplify_markup'] = false
       end,
     },
@@ -89,7 +93,26 @@ require("lazy").setup({
     {
       "folke/trouble.nvim",
       dependencies = { "nvim-tree/nvim-web-devicons" },
-      config = true,
+      opts = {
+	icons = {
+	  indent = {
+	    middle = " ",
+	    last = " ",
+	    top = " ",
+	    ws = "│  ",
+	  },
+	},
+	modes = {
+	  diagnostics = {
+	    groups = {
+	      { "filename", format = "{file_icon} {basename:Title} {count}" },
+	    },
+	    filter = { buf = 0 },
+	  },
+	},
+	warn_no_results = false,
+	open_no_results = true,
+      },
     },
     {"tpope/vim-fugitive"},
     {"tpope/vim-rhubarb"},
