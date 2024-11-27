@@ -1,71 +1,112 @@
--- Revert to pre-0.10.0 color defaults
-vim.cmd.colorscheme('vim')
-vim.o.termguicolors = false
-
--- Pre plugin loading configuration
-vim.g.python3_host_prog = '/usr/bin/python'
-vim.g.polyglot_disabled = { 'python', 'autoindent' }
-
 -- Plugin loading
-local vim = vim
-local Plug = vim.fn['plug#']
 
-vim.call('plug#begin')
+-- Bootstrap lazy.nvim
+local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+if not (vim.uv or vim.loop).fs_stat(lazypath) then
+  local lazyrepo = "https://github.com/folke/lazy.nvim.git"
+  local out = vim.fn.system({ "git", "clone", "--filter=blob:none", "--branch=stable", lazyrepo, lazypath })
+  if vim.v.shell_error ~= 0 then
+    vim.api.nvim_echo({
+      { "Failed to clone lazy.nvim:\n", "ErrorMsg" },
+      { out, "WarningMsg" },
+      { "\nPress any key to exit..." },
+    }, true, {})
+    vim.fn.getchar()
+    os.exit(1)
+  end
+end
+vim.opt.rtp:prepend(lazypath)
 
--- Optional dependency of trouble.nvim and lualine.nvim
-Plug('nvim-tree/nvim-web-devicons')
+-- Make sure to setup `mapleader` and `maplocalleader` before
+-- loading lazy.nvim so that mappings are correct.
+-- This is also a good place to setup other settings (vim.opt)
+vim.g.mapleader = " "
+vim.g.maplocalleader = "\\"
 
-Plug('nvim-lualine/lualine.nvim')
-
--- Plug('bling/vim-bufferline')
-
-Plug('Raimondi/delimitMate')
-
-Plug('tmhedberg/SimpylFold')
-
--- Plug('vim-scripts/indentpython.vim')
-
-Plug('lervag/vimtex')
-
-Plug('tpope/vim-surround')
-
-Plug('tpope/vim-repeat')
-
-Plug('wookayin/semshi', { ['do'] = function()
-     vim.cmd["UpdateRemotePlugins"]()
-end })
-
-Plug('ellisonleao/glow.nvim')
-
-Plug('neovim/nvim-lspconfig')
-
-Plug('sheerun/vim-polyglot')
-
-Plug('tpope/vim-sleuth')
-
-Plug('kkoomen/vim-doge')
-
-Plug('dstein64/vim-startuptime')
-
-Plug('folke/trouble.nvim')
-
-Plug('tpope/vim-fugitive')
-
-Plug('tpope/vim-rhubarb')
-
-Plug('lcheylus/overlength.nvim')
-
-Plug('ntpeters/vim-better-whitespace')
-
-vim.call('plug#end')
-
--- Post plugin loading configuration
-
-vim.g.vimtex_view_general_viewer = 'evince'
-
-vim.g['semshi#simplify_markup'] = false
-
-vim.g.doge_doc_standard_python = 'google'
+-- Setup lazy.nvim
+require("lazy").setup({
+  spec = {
+    {
+      "folke/tokyonight.nvim",
+      lazy = false, -- make sure we load this during startup if it is your main colorscheme
+      priority = 1000, -- make sure to load this before all the other start plugins
+      config = function()
+	-- load the colorscheme here
+	vim.cmd([[colorscheme tokyonight]])
+      end,
+    },
+    {
+      "nvim-lualine/lualine.nvim",
+      dependencies = { "nvim-tree/nvim-web-devicons" },
+      opts = {
+	sections = {
+	  lualine_a = {'mode'},
+	  lualine_b = {
+	    {'branch', fmt = function(str) return str:sub(1, 20) end },
+	    'diff', 'diagnostics'
+	  },
+	  lualine_c = {'filename'},
+	  lualine_x = {'encoding', 'fileformat', 'filetype'},
+	  lualine_y = {'progress'},
+	  lualine_z = {'location'}
+	},
+      },
+    },
+    {"Raimondi/delimitMate"},
+    {"tmhedberg/SimpylFold"},
+    {
+      "lervag/vimtex",
+      config = function()
+	vim.g.vimtex_view_general_viewer = 'evince'
+      end,
+    },
+    {"tpope/vim-surround"},
+    {"tpope/vim-repeat"},
+    {
+      "wookayin/semshi",
+      build = ":UpdateRemotePlugins",
+      init = function()
+	vim.g.python3_host_prog = "/usr/bin/python"
+	vim.g['semshi#simplify_markup'] = false
+      end,
+    },
+    {"ellisonleao/glow.nvim", config = true, cmd = "Glow"},
+    {"neovim/nvim-lspconfig"},
+    {
+      "sheerun/vim-polyglot",
+      init = function()
+	vim.g.polyglot_disabled = { "python", "autoindent" }
+      end,
+    },
+    {"tpope/vim-sleuth"},
+    {
+      "kkoomen/vim-doge",
+      config = function()
+	vim.g.doge_doc_standard_python = 'google'
+      end,
+    },
+    {"dstein64/vim-startuptime"},
+    {
+      "folke/trouble.nvim",
+      dependencies = { "nvim-tree/nvim-web-devicons" },
+      config = true,
+    },
+    {"tpope/vim-fugitive"},
+    {"tpope/vim-rhubarb"},
+    {
+      "lcheylus/overlength.nvim",
+      opts = { textwidth_mode = 1 },
+    },
+    {"ntpeters/vim-better-whitespace"},
+    -- {"bling/vim-bufferline"},
+    -- {"vim-scripts/indentpython.vim"},
+  },
+  -- Configure any other settings here. See the documentation for more details.
+  -- colorscheme that will be used when installing plugins.
+  install = { colorscheme = { "tokyonight" } },
+  -- automatically check for plugin updates
+  checker = { enabled = true },
+})
 
 -- General neovim configuration
 
@@ -110,30 +151,14 @@ map <F7> mzgg=G`z<CR>
 
 -- Lua plugin configuration
 
-require('lualine').setup {
-  sections = {
-    lualine_a = {'mode'},
-    lualine_b = {
-      {'branch', fmt = function(str) return str:sub(1, 20) end },
-      'diff', 'diagnostics'
-    },
-    lualine_c = {'filename'},
-    lualine_x = {'encoding', 'fileformat', 'filetype'},
-    lualine_y = {'progress'},
-    lualine_z = {'location'}
-  }
-}
-
-require('glow').setup()
-
 local lspconfig = require('lspconfig')
-lspconfig.ruff_lsp.setup{
+lspconfig.ruff.setup({
   init_options = {
     settings = {
-      -- format = { args = { "--line-length=100" } },
+      format = { args = { "--line-length=100" } },
     }
   }
-}
+})
 lspconfig.bashls.setup{}
 -- Global mappings.
 -- See `:help vim.diagnostic.*` for documentation on any of the below functions
@@ -172,9 +197,3 @@ vim.api.nvim_create_autocmd('LspAttach', {
     end, opts)
   end,
 })
-
-require('overlength').setup({
-  textwidth_mode = 1
-})
-
-require('trouble').setup()
