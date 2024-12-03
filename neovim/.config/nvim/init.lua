@@ -122,6 +122,7 @@ require("lazy").setup({
       opts = { textwidth_mode = 1 },
     },
     {"ntpeters/vim-better-whitespace"},
+    {"fladson/vim-kitty", ft = "kitty"},
     -- {"bling/vim-bufferline"},
     -- {"vim-scripts/indentpython.vim"},
   },
