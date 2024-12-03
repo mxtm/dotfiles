@@ -92,6 +92,7 @@ require("lazy").setup({
     {"dstein64/vim-startuptime"},
     {
       "folke/trouble.nvim",
+      cmd = { "Trouble" },
       dependencies = { "nvim-tree/nvim-web-devicons" },
       opts = {
 	icons = {
