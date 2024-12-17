@@ -36,6 +36,19 @@ require("lazy").setup({
       end,
     },
     {
+      "folke/snacks.nvim",
+      lazy = false,
+      priority = 1000,
+      opts = {
+	scroll = {
+	  animate = {
+	    duration = { step = 15, total = 150 },
+	    easing = "outQuad",
+	  },
+	},
+      },
+    },
+    {
       "nvim-lualine/lualine.nvim",
       dependencies = { "nvim-tree/nvim-web-devicons" },
       opts = {
@@ -52,44 +65,61 @@ require("lazy").setup({
 	},
       },
     },
-    {"Raimondi/delimitMate"},
-    {"tmhedberg/SimpylFold"},
-    {
-      "lervag/vimtex",
-      config = function()
-	vim.g.vimtex_view_general_viewer = 'evince'
-      end,
-    },
-    {"tpope/vim-surround"},
-    {"tpope/vim-repeat"},
     {
       "wookayin/semshi",
       build = ":UpdateRemotePlugins",
       init = function()
-	if vim.loop.os_uname().sysname == "Darwin" then
-	  vim.g.python3_host_prog = "/opt/homebrew/bin/python3.11"
-	else
-	  vim.g.python3_host_prog = "/usr/bin/python"
-	end
-	vim.g['semshi#simplify_markup'] = false
+        if vim.loop.os_uname().sysname == "Darwin" then
+          vim.g.python3_host_prog = "/opt/homebrew/bin/python3.11"
+        else
+          vim.g.python3_host_prog = "/usr/bin/python"
+        end
+        vim.g['semshi#simplify_markup'] = false
+	vim.g["semshi#excluded_hl_groups"] = {
+	  "local",
+	  "unresolved",
+	  "attribute",
+	  "builtin",
+	  "free",
+	  "global",
+	  "parameter",
+	  "parameterUnused",
+	  "self",
+	}
       end,
     },
-    {"ellisonleao/glow.nvim", config = true, cmd = "Glow"},
-    {"neovim/nvim-lspconfig"},
     {
-      "sheerun/vim-polyglot",
-      init = function()
-	vim.g.polyglot_disabled = { "python", "autoindent" }
-      end,
-    },
-    {"tpope/vim-sleuth"},
-    {
-      "kkoomen/vim-doge",
+      "neovim/nvim-lspconfig",
+      dependencies = { "saghen/blink.cmp" },
       config = function()
-	vim.g.doge_doc_standard_python = 'google'
+	local capabilities = require('blink.cmp').get_lsp_capabilities()
+	local lspconfig = require('lspconfig')
+
+	lspconfig.pyright.setup({
+	    capabilities = capabilities,
+	    settings = {
+	      python = {
+		analysis = {
+		  ignore = { "*" },
+		  typeCheckingMode = "off",
+		  diagnosticMode = "openFilesOnly",
+		},
+	      },
+	    },
+	})
+
+	lspconfig.ruff.setup({
+	  init_options = {
+	    settings = {
+	      format = { args = { "--line-length=100" } },
+	    }
+	  },
+	  on_attach = function(client) client.server_capabilities.hoverProvider = false end,
+	})
+
+	lspconfig.bashls.setup{}
       end,
     },
-    {"dstein64/vim-startuptime"},
     {
       "folke/trouble.nvim",
       cmd = { "Trouble" },
@@ -115,22 +145,71 @@ require("lazy").setup({
 	open_no_results = true,
       },
     },
-    {"tpope/vim-fugitive"},
-    {"tpope/vim-rhubarb"},
+    {
+      "nvim-treesitter/nvim-treesitter",
+      build = ":TSUpdate",
+      config = function ()
+	local configs = require("nvim-treesitter.configs")
+
+	configs.setup({
+	    ensure_installed = { "python" },
+	    sync_install = false,
+	    highlight = { enable = true },
+	    indent = { enable = false },
+	  })
+      end
+    },
+    {
+      "saghen/blink.cmp",
+      version = "v0.*",
+      opts = {
+	keymap = { preset = "super-tab" },
+	highlight = {
+	  use_nvim_cmp_as_default = true,
+	},
+	nerd_font_variant = "mono",
+      },
+    },
+    {
+      "lervag/vimtex",
+      config = function()
+	vim.g.vimtex_view_general_viewer = 'evince'
+      end,
+      ft = "latex",
+    },
+    {
+      "sheerun/vim-polyglot",
+      init = function()
+	vim.g.polyglot_disabled = { "python", "autoindent" }
+      end,
+    },
+    {
+      "kkoomen/vim-doge",
+      config = function()
+	vim.g.doge_doc_standard_python = 'google'
+      end,
+    },
     {
       "lcheylus/overlength.nvim",
       opts = { textwidth_mode = 1 },
     },
-    {"ntpeters/vim-better-whitespace"},
+    {"ellisonleao/glow.nvim", config = true, cmd = "Glow"},
     {"fladson/vim-kitty", ft = "kitty"},
-    -- {"bling/vim-bufferline"},
-    -- {"vim-scripts/indentpython.vim"},
+    {"tpope/vim-fugitive", cmd = "Git"},
+    {"dstein64/vim-startuptime", cmd = "StartupTime"},
+    {"tpope/vim-rhubarb"},
+    {"ntpeters/vim-better-whitespace"},
+    {"tpope/vim-sleuth"},
+    {"Raimondi/delimitMate"},
+    {"tmhedberg/SimpylFold"},
+    {"tpope/vim-surround"},
+    {"tpope/vim-repeat"},
   },
   -- Configure any other settings here. See the documentation for more details.
   -- colorscheme that will be used when installing plugins.
   install = { colorscheme = { "tokyonight" } },
   -- automatically check for plugin updates
-  checker = { enabled = true },
+  checker = { enabled = false },
 })
 
 -- General neovim configuration
@@ -163,62 +242,3 @@ vim.keymap.set('i', '<up>', '<nop>')
 vim.keymap.set('i', '<down>', '<nop>')
 vim.keymap.set('i', '<left>', '<nop>')
 vim.keymap.set('i', '<right>', '<nop>')
-
---[[
-"Auto indenting toggle for pasting
-nnoremap <F2> :set invpaste paste?<CR>
-set pastetoggle=<F2>
-set showmode
-
-"Reformat key
-map <F7> mzgg=G`z<CR>
---]]
-
--- Lua plugin configuration
-
-local lspconfig = require('lspconfig')
-lspconfig.ruff.setup({
-  init_options = {
-    settings = {
-      format = { args = { "--line-length=100" } },
-    }
-  }
-})
-lspconfig.bashls.setup{}
--- Global mappings.
--- See `:help vim.diagnostic.*` for documentation on any of the below functions
-vim.keymap.set('n', '<space>e', vim.diagnostic.open_float)
-vim.keymap.set('n', '[d', vim.diagnostic.goto_prev)
-vim.keymap.set('n', ']d', vim.diagnostic.goto_next)
-vim.keymap.set('n', '<space>q', vim.diagnostic.setloclist)
-
--- Use LspAttach autocommand to only map the following keys
--- after the language server attaches to the current buffer
-vim.api.nvim_create_autocmd('LspAttach', {
-  group = vim.api.nvim_create_augroup('UserLspConfig', {}),
-  callback = function(ev)
-    -- Enable completion triggered by <c-x><c-o>
-    vim.bo[ev.buf].omnifunc = 'v:lua.vim.lsp.omnifunc'
-
-    -- Buffer local mappings.
-    -- See `:help vim.lsp.*` for documentation on any of the below functions
-    local opts = { buffer = ev.buf }
-    vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, opts)
-    vim.keymap.set('n', 'gd', vim.lsp.buf.definition, opts)
-    vim.keymap.set('n', 'K', vim.lsp.buf.hover, opts)
-    vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, opts)
-    vim.keymap.set('n', '<C-k>', vim.lsp.buf.signature_help, opts)
-    vim.keymap.set('n', '<space>wa', vim.lsp.buf.add_workspace_folder, opts)
-    vim.keymap.set('n', '<space>wr', vim.lsp.buf.remove_workspace_folder, opts)
-    vim.keymap.set('n', '<space>wl', function()
-      print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
-    end, opts)
-    vim.keymap.set('n', '<space>D', vim.lsp.buf.type_definition, opts)
-    vim.keymap.set('n', '<space>rn', vim.lsp.buf.rename, opts)
-    vim.keymap.set({ 'n', 'v' }, '<space>ca', vim.lsp.buf.code_action, opts)
-    vim.keymap.set('n', 'gr', vim.lsp.buf.references, opts)
-    vim.keymap.set('n', '<space>f', function()
-      vim.lsp.buf.format { async = true }
-    end, opts)
-  end,
-})
