@@ -74,7 +74,8 @@ require("lazy").setup({
         else
           vim.g.python3_host_prog = "/usr/bin/python"
         end
-        vim.g['semshi#simplify_markup'] = false
+	vim.g["semshi#simplify_markup"] = false
+	vim.g["semshi#error_sign"] = false
 	vim.g["semshi#excluded_hl_groups"] = {
 	  "local",
 	  "unresolved",
@@ -118,7 +119,34 @@ require("lazy").setup({
 	})
 
 	lspconfig.bashls.setup{}
+
+	lspconfig.sqlls.setup{}
       end,
+    },
+    {
+      "nvim-treesitter/nvim-treesitter",
+      build = ":TSUpdate",
+      config = function ()
+	local configs = require("nvim-treesitter.configs")
+
+	configs.setup({
+	    ensure_installed = { "python", "sql" },
+	    sync_install = false,
+	    highlight = { enable = true },
+	    indent = { enable = false },
+	  })
+      end
+    },
+    {
+      "saghen/blink.cmp",
+      version = "v0.*",
+      opts = {
+	keymap = { preset = "super-tab" },
+	highlight = {
+	  use_nvim_cmp_as_default = true,
+	},
+	nerd_font_variant = "mono",
+      },
     },
     {
       "folke/trouble.nvim",
@@ -146,38 +174,6 @@ require("lazy").setup({
       },
     },
     {
-      "nvim-treesitter/nvim-treesitter",
-      build = ":TSUpdate",
-      config = function ()
-	local configs = require("nvim-treesitter.configs")
-
-	configs.setup({
-	    ensure_installed = { "python" },
-	    sync_install = false,
-	    highlight = { enable = true },
-	    indent = { enable = false },
-	  })
-      end
-    },
-    {
-      "saghen/blink.cmp",
-      version = "v0.*",
-      opts = {
-	keymap = { preset = "super-tab" },
-	highlight = {
-	  use_nvim_cmp_as_default = true,
-	},
-	nerd_font_variant = "mono",
-      },
-    },
-    {
-      "lervag/vimtex",
-      config = function()
-	vim.g.vimtex_view_general_viewer = 'evince'
-      end,
-      ft = "latex",
-    },
-    {
       "sheerun/vim-polyglot",
       init = function()
 	vim.g.polyglot_disabled = { "python", "autoindent" }
@@ -188,6 +184,13 @@ require("lazy").setup({
       config = function()
 	vim.g.doge_doc_standard_python = 'google'
       end,
+    },
+    {
+      "lervag/vimtex",
+      config = function()
+	vim.g.vimtex_view_general_viewer = 'evince'
+      end,
+      ft = "latex",
     },
     {
       "lcheylus/overlength.nvim",
@@ -204,6 +207,7 @@ require("lazy").setup({
     {"tmhedberg/SimpylFold"},
     {"tpope/vim-surround"},
     {"tpope/vim-repeat"},
+    {"AndrewRadev/splitjoin.vim"},
   },
   -- Configure any other settings here. See the documentation for more details.
   -- colorscheme that will be used when installing plugins.
