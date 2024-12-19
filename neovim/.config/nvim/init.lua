@@ -189,12 +189,7 @@ require("lazy").setup({
 				vim.g.polyglot_disabled = { "python", "autoindent" }
 			end,
 		},
-		{
-			"kkoomen/vim-doge",
-			config = function()
-				vim.g.doge_doc_standard_python = "google"
-			end,
-		},
+		{ "danymat/neogen", config = true },
 		{
 			"lervag/vimtex",
 			config = function()
