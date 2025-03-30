@@ -46,6 +46,7 @@ require("lazy").setup({
 						easing = "outQuad",
 					},
 				},
+				indent = {},
 			},
 		},
 		{
