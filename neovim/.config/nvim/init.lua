@@ -68,6 +68,24 @@ require("lazy").setup({
 			end
 		},
 		{
+			"folke/which-key.nvim",
+			event = "VeryLazy",
+			opts = {
+				-- your configuration comes here
+				-- or leave it empty to use the default settings
+				-- refer to the configuration section below
+			},
+			keys = {
+				{
+					"<leader>?",
+					function()
+						require("which-key").show({ global = false })
+					end,
+					desc = "Buffer Local Keymaps (which-key)",
+				},
+			},
+		},
+		{
 			"nvim-lualine/lualine.nvim",
 			dependencies = { "nvim-tree/nvim-web-devicons" },
 			opts = {
@@ -200,6 +218,16 @@ require("lazy").setup({
 			},
 		},
 		{
+			"akinsho/git-conflict.nvim",
+			version = "*",
+			event = "VeryLazy",
+			config = true,
+			keys = {
+			  { "<leader>gq", "<Cmd>GitConflictListQf<CR>", desc = "list conflicts (qflist)" },
+			  { "<leader>gr", "<Cmd>GitConflictRefresh<CR>", desc = "refresh conflicts (qflist)" },
+			},
+		},
+		{
 			"sheerun/vim-polyglot",
 			init = function()
 				vim.g.polyglot_disabled = { "python", "autoindent" }
@@ -215,7 +243,21 @@ require("lazy").setup({
 		},
 		{
 			"lcheylus/overlength.nvim",
-			opts = { textwidth_mode = 1 },
+			opts = { enabled = false, textwidth_mode = 1 },
+		},
+		{
+			'Bekaboo/dropbar.nvim',
+			-- optional, but required for fuzzy finder support
+			dependencies = {
+				'nvim-telescope/telescope-fzf-native.nvim',
+				build = 'make'
+			},
+			config = function()
+				local dropbar_api = require('dropbar.api')
+				vim.keymap.set('n', '<Leader>;', dropbar_api.pick, { desc = 'Pick symbols in winbar' })
+				vim.keymap.set('n', '[;', dropbar_api.goto_context_start, { desc = 'Go to start of current context' })
+				vim.keymap.set('n', '];', dropbar_api.select_next_context, { desc = 'Select next context' })
+			end
 		},
 		{ "ellisonleao/glow.nvim", config = true, cmd = "Glow" },
 		{ "fladson/vim-kitty", ft = "kitty" },
