@@ -51,30 +51,24 @@ require("lazy").setup({
 		},
 		{
 			"rachartier/tiny-inline-diagnostic.nvim",
-			event = "VeryLazy", -- Or `LspAttach`
+			event = "LspAttach", -- Or `VeryLazy`
 			priority = 1000, -- needs to be loaded in first
-			--config = function()
-			--	require('tiny-inline-diagnostic').setup()
-			--end
-			opts = function()
-				return {
+			config = function()
+				require("tiny-inline-diagnostic").setup({
 					options = {
 						multilines = {
 							enabled = true,
 							always_show = true,
 						},
 					},
-				}
+				})
+				vim.diagnostic.config({ virtual_text = false })
 			end,
 		},
 		{
 			"folke/which-key.nvim",
 			event = "VeryLazy",
-			opts = {
-				-- your configuration comes here
-				-- or leave it empty to use the default settings
-				-- refer to the configuration section below
-			},
+			opts = {},
 			keys = {
 				{
 					"<leader>?",
@@ -133,39 +127,56 @@ require("lazy").setup({
 			end,
 		},
 		{
+			"mason-org/mason-lspconfig.nvim",
+			opts = {
+				--ensure_installed = { "pyright", "ruff", "bashls", "sqlls" },
+				ensure_installed = { "ty", "ruff", "bashls", "sqlls" },
+			},
+			dependencies = {
+				{ "mason-org/mason.nvim", opts = {} },
+				"neovim/nvim-lspconfig",
+			},
+		},
+		{
 			"neovim/nvim-lspconfig",
 			dependencies = { "saghen/blink.cmp" },
 			config = function()
 				local capabilities = require("blink.cmp").get_lsp_capabilities()
-				local lspconfig = require("lspconfig")
+				vim.lsp.config("*", { capabilities = capabilities })
 
-				lspconfig.pyright.setup({
-					capabilities = capabilities,
-					settings = {
-						python = {
-							analysis = {
-								ignore = { "*" },
-								typeCheckingMode = "off",
-								diagnosticMode = "openFilesOnly",
-							},
-						},
+				--vim.lsp.config("pyright", {
+				--	settings = {
+				--		python = {
+				--			analysis = {
+				--				ignore = { "*" },
+				--				typeCheckingMode = "off",
+				--				diagnosticMode = "openFilesOnly",
+				--			},
+				--		},
+				--	},
+				--})
+
+				vim.lsp.config("ty", {
+					handlers = {
+						-- For push diagnostics (older method)
+						["textDocument/publishDiagnostics"] = function() end,
+						-- For pull diagnostics (modern method)
+						["textDocument/diagnostic"] = function() end,
+						-- Ignore workspace refresh requests too
+						["workspace/diagnostic/refresh"] = function() end,
 					},
 				})
 
-				lspconfig.ruff.setup({
+				vim.lsp.config("ruff", {
 					init_options = {
 						settings = {
-							format = { args = { "--line-length=100" } },
+							lineLength = 100,
 						},
 					},
 					on_attach = function(client)
 						client.server_capabilities.hoverProvider = false
 					end,
 				})
-
-				lspconfig.bashls.setup({})
-
-				lspconfig.sqlls.setup({})
 			end,
 		},
 		{
