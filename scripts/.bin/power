@@ -1,14 +1,18 @@
 #!/bin/bash
 COMMANDS="Exit\nRestart dwm\nShutdown\nReboot"
 
-COMMAND=`echo -e $COMMANDS | dmenu -i -p "Power:" "$@"`
-echo $COMMAND
+COMMAND=$(echo -e "$COMMANDS" | dmenu -i -p "Power:" "$@")
+echo "$COMMAND"
 case $COMMAND in
 	Exit)
-		kill -TERM `pidof dwm` 
+		if [ -f ~/.dwm_conky_pid ]; then
+			kill "$(cat ~/.dwm_conky_pid)" 2>/dev/null
+			rm ~/.dwm_conky_pid
+		fi
+		kill -TERM "$(pidof dwm-flexipatch)"
 	;;
 	"Restart dwm")
-		kill -HUP `pidof dwm` 
+		kill -HUP "$(pidof dwm-flexipatch)"
 	;;
 	Shutdown)
 		exec systemctl poweroff
