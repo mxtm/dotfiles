@@ -129,8 +129,13 @@ require("lazy").setup({
 		{
 			"mason-org/mason-lspconfig.nvim",
 			opts = {
-				--ensure_installed = { "pyright", "ruff", "bashls", "sqlls" },
-				ensure_installed = { "ty", "ruff", "bashls", "sqlls" },
+				ensure_installed = {
+					"ty",
+					--"pyright",
+					"ruff",
+					"bashls",
+					"sqlls",
+				},
 			},
 			dependencies = {
 				{ "mason-org/mason.nvim", opts = {} },
@@ -189,7 +194,7 @@ require("lazy").setup({
 					ensure_installed = { "python", "sql", "bash" },
 					sync_install = false,
 					highlight = { enable = true },
-					indent = { enable = false },
+					indent = { enable = true },
 				})
 			end,
 		},
