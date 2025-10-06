@@ -134,7 +134,8 @@ require("lazy").setup({
 					--"pyright",
 					"ruff",
 					"bashls",
-					"sqlls",
+					--"sqlls",
+					"sqruff",
 				},
 			},
 			dependencies = {
