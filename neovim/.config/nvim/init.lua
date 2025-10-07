@@ -136,6 +136,7 @@ require("lazy").setup({
 					"bashls",
 					--"sqlls",
 					"sqruff",
+					"tombi",
 				},
 			},
 			dependencies = {
