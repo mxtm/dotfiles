@@ -257,7 +257,7 @@ require("lazy").setup({
 			config = function()
 				vim.g.vimtex_view_general_viewer = "evince"
 			end,
-			ft = "latex",
+			ft = "tex",
 		},
 		{
 			"lcheylus/overlength.nvim",
