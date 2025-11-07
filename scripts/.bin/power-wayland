@@ -1,0 +1,16 @@
+#!/bin/bash
+COMMANDS="Exit\nShutdown\nReboot"
+
+COMMAND=$(echo -e "$COMMANDS" | fuzzel --dmenu "Power:" "$@")
+echo "$COMMAND"
+case $COMMAND in
+	Exit)
+		niri msg action quit -s
+	;;
+	Shutdown)
+		exec systemctl poweroff
+	;;
+	Reboot)
+		exec systemctl reboot
+	;;
+esac
