@@ -290,6 +290,7 @@ require("lazy").setup({
 		},
 		{ "ellisonleao/glow.nvim", config = true, cmd = "Glow" },
 		{ "fladson/vim-kitty", ft = "kitty" },
+		{ "imsnif/kdl.vim" },
 		{ "tpope/vim-fugitive", cmd = "Git" },
 		{ "dstein64/vim-startuptime", cmd = "StartupTime" },
 		{ "tpope/vim-rhubarb" },
