@@ -130,13 +130,16 @@ require("lazy").setup({
 			"mason-org/mason-lspconfig.nvim",
 			opts = {
 				ensure_installed = {
-					"ty",
+					"zuban", -- Python
+					"ruff", -- Python lint / format
+					"rust_analyzer", -- Rust
+					"bashls", -- Bash
+					"sqruff", -- SQL
+					"tombi", -- TOML
+					"jsonls", -- JSON
+					--"ty",
 					--"pyright",
-					"ruff",
-					"bashls",
 					--"sqlls",
-					"sqruff",
-					"tombi",
 				},
 			},
 			dependencies = {
@@ -163,13 +166,21 @@ require("lazy").setup({
 				--	},
 				--})
 
-				vim.lsp.config("ty", {
+				--vim.lsp.config("ty", {
+				--	handlers = {
+				--		-- For push diagnostics (older method)
+				--		["textDocument/publishDiagnostics"] = function() end,
+				--		-- For pull diagnostics (modern method)
+				--		["textDocument/diagnostic"] = function() end,
+				--		-- Ignore workspace refresh requests too
+				--		["workspace/diagnostic/refresh"] = function() end,
+				--	},
+				--})
+
+				vim.lsp.config("zuban", {
 					handlers = {
-						-- For push diagnostics (older method)
 						["textDocument/publishDiagnostics"] = function() end,
-						-- For pull diagnostics (modern method)
 						["textDocument/diagnostic"] = function() end,
-						-- Ignore workspace refresh requests too
 						["workspace/diagnostic/refresh"] = function() end,
 					},
 				})
