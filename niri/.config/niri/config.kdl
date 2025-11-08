@@ -387,7 +387,7 @@ binds {
     XF86AudioRaiseVolume allow-when-locked=true { spawn-sh "pamixer --increase 5"; }
     XF86AudioLowerVolume allow-when-locked=true { spawn-sh "pamixer --decrease 5"; }
     XF86AudioMute        allow-when-locked=true { spawn-sh "pamixer --toggle-mute"; }
-    XF86AudioMicMute     allow-when-locked=true { spawn-sh "wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle"; }
+    XF86AudioMicMute     allow-when-locked=true { spawn-sh "pamixer --default-source --toggle-mute"; }
 
     // Example brightness key mappings for brightnessctl.
     // You can use regular spawn with multiple arguments too (to avoid going through "sh"),
