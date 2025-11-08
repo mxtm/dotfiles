@@ -112,6 +112,8 @@
     },
     "clock": {
         // "timezone": "America/New_York",
+        "format": "{:%H:%M:%S}",
+        "interval": 1,
         "tooltip-format": "<big>{:%Y %B}</big>\n<tt><small>{calendar}</small></tt>",
         "format-alt": "{:%Y-%m-%d}"
     },
@@ -128,13 +130,13 @@
         "critical-threshold": 80,
         // "format-critical": "{temperatureC}°C {icon}",
         "format": "{temperatureC}°C {icon}",
-        "format-icons": ["", "", ""]
+        "format-icons": ["", "", ""]
     },
-    "backlight": {
-        // "device": "acpi_video1",
-        "format": "{percent}% {icon}",
-        "format-icons": ["", "", "", "", "", "", "", "", ""]
-    },
+    // "backlight": {
+    //     // "device": "acpi_video1",
+    //     "format": "{percent}% {icon}",
+    //     "format-icons": ["", "", "", "", "", "", "", "", ""]
+    // },
     "battery": {
         "states": {
             // "good": 95,
@@ -143,12 +145,12 @@
         },
         "format": "{capacity}% {icon}",
         "format-full": "{capacity}% {icon}",
-        "format-charging": "{capacity}% ",
+        "format-charging": "{capacity}% ",
         "format-plugged": "{capacity}% ",
         "format-alt": "{time} {icon}",
         // "format-good": "", // An empty format will hide the module
         // "format-full": "",
-        "format-icons": ["", "", "", "", ""]
+        "format-icons": [" ", " ", " ", " ", " "]
     },
     // "battery#bat2": {
     //     "bat": "BAT2"
@@ -166,19 +168,20 @@
     // },
     "network": {
         // "interface": "wlp2*", // (Optional) To force the use of this interface
-        "format-wifi": "{essid} ({signalStrength}%) ",
-        "format-ethernet": "{ipaddr}/{cidr} ",
+        "format-wifi": "{essid} ({signalStrength}%)  ",
+        "format-ethernet": "{ipaddr}/{cidr} 󰈀 ",
         "tooltip-format": "{ifname} via {gwaddr} ",
         "format-linked": "{ifname} (No IP) ",
         "format-disconnected": "Disconnected ⚠",
-        "format-alt": "{ifname}: {ipaddr}/{cidr}"
+        // "format-alt": "{ifname}: {ipaddr}/{cidr}",
+        "on-click": "networkmanager_dmenu"
     },
     "pulseaudio": {
         // "scroll-step": 1, // %, can be a float
         "format": "{volume}% {icon} {format_source}",
         "format-bluetooth": "{volume}% {icon} {format_source}",
         "format-bluetooth-muted": " {icon} {format_source}",
-        "format-muted": " {format_source}",
+        "format-muted": "󰖁 {format_source}",
         "format-source": "{volume}% ",
         "format-source-muted": "",
         "format-icons": {
