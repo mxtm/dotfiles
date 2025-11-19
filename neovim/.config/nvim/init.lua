@@ -151,8 +151,8 @@ require("lazy").setup({
 			"neovim/nvim-lspconfig",
 			dependencies = { "saghen/blink.cmp" },
 			config = function()
-				local capabilities = require("blink.cmp").get_lsp_capabilities()
-				vim.lsp.config("*", { capabilities = capabilities })
+				-- local capabilities = require("blink.cmp").get_lsp_capabilities()
+				-- vim.lsp.config("*", { capabilities = capabilities })
 
 				--vim.lsp.config("pyright", {
 				--	settings = {
@@ -177,13 +177,13 @@ require("lazy").setup({
 				--	},
 				--})
 
-				vim.lsp.config("zuban", {
-					handlers = {
-						["textDocument/publishDiagnostics"] = function() end,
-						["textDocument/diagnostic"] = function() end,
-						["workspace/diagnostic/refresh"] = function() end,
-					},
-				})
+				-- vim.lsp.config("zuban", {
+				-- 	handlers = {
+				-- 		["textDocument/publishDiagnostics"] = function() end,
+				-- 		["textDocument/diagnostic"] = function() end,
+				-- 		["workspace/diagnostic/refresh"] = function() end,
+				-- 	},
+				-- })
 
 				vim.lsp.config("ruff", {
 					init_options = {
@@ -213,7 +213,7 @@ require("lazy").setup({
 		},
 		{
 			"saghen/blink.cmp",
-			version = "v0.*",
+			version = "1.*",
 			opts = {
 				keymap = { preset = "super-tab" },
 				appearance = { nerd_font_variant = "mono", use_nvim_cmp_as_default = true },
