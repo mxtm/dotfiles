@@ -1,0 +1,6 @@
+[Unit]
+Description=Battery monitor script
+
+[Service]
+Type=oneshot
+ExecStart=%h/.bin/batt

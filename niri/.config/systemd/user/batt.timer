@@ -1,0 +1,10 @@
+[Unit]
+Description=Run batt script every 3 minutes
+
+[Timer]
+OnBootSec=3min
+OnUnitActiveSec=3min
+Unit=batt.service
+
+[Install]
+WantedBy=timers.target
